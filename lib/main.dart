@@ -18,7 +18,7 @@ class MyApp extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Great Places',
+      title: 'E-Product Verification',
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       theme: theme,
@@ -26,7 +26,7 @@ class MyApp extends HookWidget {
       routes: {
         Routes.HOME_SCREEN: (context) => HomeScreen(
               arguments: ModalRoute.of(context)!.settings.arguments
-                  as HomeScreenArguments,
+                  as HomeScreenArguments?,
             ),
         Routes.SUCCESS_SCREEN: (context) => SuccessScreen(
               arguments: ModalRoute.of(context)!.settings.arguments
