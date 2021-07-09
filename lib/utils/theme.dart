@@ -12,8 +12,8 @@ ThemeData customThemeFoundation = ThemeData(
   primarySwatch: ColorConstants.PRIMARY,
   accentColor: ColorConstants.SECONDARY,
   fontFamily: 'OpenSans',
-  scaffoldBackgroundColor: Color(0xffF7F7F7),
-  backgroundColor: Color(0xffF7F7F7),
+  scaffoldBackgroundColor: const Color(0xffF7F7F7),
+  backgroundColor: const Color(0xffF7F7F7),
   pageTransitionsTheme: PageTransitionsTheme(
     builders: {
       TargetPlatform.android: CustomPageTransitionBuilder(),
@@ -21,7 +21,7 @@ ThemeData customThemeFoundation = ThemeData(
     },
   ),
   textTheme: ThemeData.light().textTheme.copyWith(
-        overline: TextStyle(
+        overline: const TextStyle(
           fontFamily: 'Pacifico',
           fontSize: 20.0,
           color: Colors.white,
@@ -37,16 +37,16 @@ ThemeData customThemeFoundation = ThemeData(
           ],
           fontWeight: FontWeight.bold,
         ),
-        headline6: TextStyle(
+        headline6: const TextStyle(
           fontFamily: 'Pacifico',
           fontSize: 16.0,
           fontWeight: FontWeight.bold,
         ),
       ),
   appBarTheme: AppBarTheme(
-    backgroundColor: Color(0xffF7F7F7),
+    backgroundColor: const Color(0xFF333333),
     textTheme: ThemeData.light().textTheme.copyWith(
-          headline6: TextStyle(
+          headline6: const TextStyle(
             fontFamily: 'OpenSans',
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
