@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.product_verification_flutter">
     <uses-permission android:name="android.permission.INTERNET"/>
+        <uses-permission android:name="android.permission.CAMERA" />
+
    <application
-        android:label="product_verification_flutter"
-        android:icon="@mipmap/ic_launcher">
+        android:label="E-Product Verification"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -33,7 +35,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <uses-permission android:name="android.permission.CAMERA" />
         <activity android:name="com.apptreesoftware.barcodescan.BarcodeScannerActivity"/>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
