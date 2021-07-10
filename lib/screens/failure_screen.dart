@@ -1,7 +1,10 @@
+import 'package:animated_qr_code_scanner/AnimatedQRViewController.dart';
 import 'package:flutter/material.dart';
+import 'package:product_verification_flutter/widgets/fail_animation.dart';
 
 class FailureScreenArguments {
-  FailureScreenArguments();
+  final AnimatedQRViewController controller;
+  FailureScreenArguments({required this.controller});
 }
 
 class FailureScreen extends StatelessWidget {
@@ -11,8 +14,29 @@ class FailureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: null,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Unverified Product',
+          style: Theme.of(context).appBarTheme.textTheme!.headline6!.copyWith(
+              // color: Colors.red,
+              ),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            arguments!.controller.resume();
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.chevron_left,
+          ),
+        ),
+      ),
+      body: Container(
+        alignment: Alignment.center,
+        child: const FailAnimation(),
+      ),
     );
   }
 }

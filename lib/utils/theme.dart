@@ -37,6 +37,11 @@ ThemeData customThemeFoundation = ThemeData(
           ],
           fontWeight: FontWeight.bold,
         ),
+        headline5: TextStyle(
+          fontFamily: 'OpenSans',
+          fontSize: 12.0,
+          // fontWeight: FontWeight.bold,
+        ),
         headline6: const TextStyle(
           fontFamily: 'Pacifico',
           fontSize: 16.0,

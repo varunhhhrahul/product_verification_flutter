@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 // import 'package:barcode_scan_fix/barcode_scan.dart';
+import 'package:animated_qr_code_scanner/AnimatedQRViewController.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,111 +13,226 @@ import 'package:product_verification_flutter/constants/models/product.dart';
 import 'package:product_verification_flutter/constants/routes.dart';
 import 'package:product_verification_flutter/screens/failure_screen.dart';
 import 'package:product_verification_flutter/screens/success_screen.dart';
+import 'package:product_verification_flutter/widgets/custom_buttom.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:web3dart/web3dart.dart';
 import '../utils/web3.dart';
+import 'package:animated_qr_code_scanner/animated_qr_code_scanner.dart';
+import 'package:string_validator/string_validator.dart';
 
 class HomeScreenArguments {
   HomeScreenArguments();
 }
 
-class HomeScreen extends StatefulHookWidget {
+class HomeScreen extends HookWidget {
   static const String route = '/';
+
   final HomeScreenArguments? arguments;
   const HomeScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  // late Barcode result;
-  // late QRViewController controller;
-  // @override
-  // void reassemble() {
-  //   super.reassemble();
-  //   if (Platform.isAndroid) {
-  //     controller.pauseCamera();
-  //   } else if (Platform.isIOS) {
-  //     controller.resumeCamera();
-  //   }
-  // }
-
-  // @override
-  // void dispose() {
-  //   controller.dispose();
-  //   super.dispose();
-  // }
-
-// void _onQRViewCreated(QRViewController controller) {
-//     this.controller = controller;
-//     controller.scannedDataStream.listen((scanData) {
-//       setState(() {
-//         result = scanData;
-// getData(result['address'])
-//       });
-//     });
-//   }
-  @override
   Widget build(BuildContext context) {
     final ValueNotifier<String> qrCodeResult = useState("Not Yet Scanned");
-
+    final AnimatedQRViewController controller = AnimatedQRViewController();
     bool isLoading = true;
-    final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+    // final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
     void getData(String address) async {
       final DeployedContract productFactory = await loadFactoryContract();
       final ContractFunction getProducts =
           productFactory.function("getProducts");
-      List addresses = await web3
+      List res = await web3
           .call(contract: productFactory, function: getProducts, params: []);
-      final data = addresses.firstWhere((element) => element == address);
-      if (data) {
-        final DeployedContract productContract =
-            await loadProductContract(address);
-        final ContractFunction getSummary =
-            productFactory.function("getSummary");
-        final result = await web3
-            .call(contract: productContract, function: getSummary, params: []);
-        Navigator.of(context).pushNamed(
-          Routes.SUCCESS_SCREEN,
-          arguments: SuccessScreenArguments(
-            product: Product(
-              address: productContract.address.toString(),
-              name: result[0],
-              companyName: result[1],
-              manufactureYear: result[2],
-              manufacturePlace: result[3],
-            ),
-          ),
-        );
+      // print(addresses[0][3]);
+      List addresses = res[0];
+
+      if (address.length == 42) {
+        try {
+          final data = addresses.contains(EthereumAddress.fromHex(address));
+          // print(data);
+          if (data) {
+            final DeployedContract productContract =
+                await loadProductContract(address);
+            final ContractFunction getSummary =
+                productContract.function("getSummary");
+            final result = await web3.call(
+                contract: productContract, function: getSummary, params: []);
+            Navigator.of(context).pushNamed(
+              Routes.SUCCESS_SCREEN,
+              arguments: SuccessScreenArguments(
+                product: Product(
+                  address: productContract.address.toString(),
+                  name: result[0],
+                  companyName: result[1],
+                  manufactureYear: result[2],
+                  manufacturePlace: result[3],
+                ),
+                controller: controller,
+              ),
+            );
+          } else {
+            Navigator.of(context).pushNamed(
+              Routes.FAILURE_SCREEN,
+              arguments: FailureScreenArguments(controller: controller),
+            );
+          }
+        } catch (err) {
+          Navigator.of(context).pushNamed(
+            Routes.FAILURE_SCREEN,
+            arguments: FailureScreenArguments(controller: controller),
+          );
+        }
       } else {
         Navigator.of(context).pushNamed(
           Routes.FAILURE_SCREEN,
-          arguments: FailureScreenArguments(),
+          arguments: FailureScreenArguments(controller: controller),
         );
       }
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Scan QR Code"),
+        centerTitle: true,
+        title: Text(
+          'E-Product Verification',
+          style: Theme.of(context).appBarTheme.textTheme!.headline6!.copyWith(
+              // color: Colors.red,
+              ),
+        ),
       ),
       body: Column(
-        children: const <Widget>[
-          // Expanded(
-          //   flex: 5,
-          //   child: QRView(
-          //     key: qrKey,
-          //     onQRViewCreated: _onQRViewCreated,
-          //   ),
-          // ),
+        children: [
           Expanded(
-            flex: 1,
-            child: Center(
-              child: Text('Scan a code'),
+            child: AnimatedQRView(
+              squareColor: Colors.green.withOpacity(0.25),
+              animationDuration: const Duration(milliseconds: 400),
+              onScanBeforeAnimation: (String str) {
+                print('Callback at the beginning of animation: $str');
+              },
+              onScan: (String str) async {
+                getData(str);
+              },
+              controller: controller,
             ),
-          )
+          ),
+          Container(
+            color: Colors.transparent,
+            padding: const EdgeInsets.all(
+              8.0,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                ElevatedButton(
+                  style: ButtonStyle(
+                    shadowColor: MaterialStateProperty.all(
+                      // ColorConstants.PRIMARY,
+                      Colors.grey.shade400,
+                    ),
+                    // backgroundColor: MaterialStateProperty.all(Colors.black54),
+                    elevation: MaterialStateProperty.all(10.0),
+                    shape: MaterialStateProperty.all(
+                      const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    controller.toggleFlash();
+                  },
+                  child: const Text(
+                    'Flash',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    shadowColor: MaterialStateProperty.all(
+                      // ColorConstants.PRIMARY,
+                      Colors.grey.shade400,
+                    ),
+                    // backgroundColor: MaterialStateProperty.all(Colors.black54),
+                    elevation: MaterialStateProperty.all(10.0),
+                    shape: MaterialStateProperty.all(
+                      const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    controller.resume();
+                  },
+                  child: const Text(
+                    'Rescan',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    shadowColor: MaterialStateProperty.all(
+                      // ColorConstants.PRIMARY,
+                      Colors.grey.shade400,
+                    ),
+                    // backgroundColor: MaterialStateProperty.all(Colors.black54),
+                    elevation: MaterialStateProperty.all(10.0),
+                    shape: MaterialStateProperty.all(
+                      const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    controller.flipCamera();
+                  },
+                  child: const Text(
+                    'Flip',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    shadowColor: MaterialStateProperty.all(
+                      // ColorConstants.PRIMARY,
+                      Colors.grey.shade400,
+                    ),
+                    // backgroundColor: MaterialStateProperty.all(Colors.black54),
+                    elevation: MaterialStateProperty.all(10.0),
+                    shape: MaterialStateProperty.all(
+                      const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    controller.resume();
+                  },
+                  child: const Text(
+                    'Resume',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

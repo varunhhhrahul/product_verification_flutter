@@ -54,7 +54,15 @@ dependencies:
   path: ^1.8.0
   # barcode_scan_fix: ^1.0.2
   web3dart: ^2.1.4
-  qr_code_scanner: ^0.5.1
+  # qr_code_scanner: ^0.5.1
+  flutter_plugin_android_lifecycle: ^2.0.2
+  flutter_native_splash: ^1.1.8+4
+  animated_qr_code_scanner:
+    git:
+      url: https://github.com/kiatuki/animated_qr_code_scanner.git
+      ref: v0.1.7
+  string_validator: ^0.3.0
+  animated_check: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -72,13 +80,13 @@ dev_dependencies:
 flutter_icons:
   android: 'launcher_icon'
   ios: true
-  image_path: 'assets/images/places-adaptive.png'
-  adaptive_icon_background: '#000000'
-  adaptive_icon_foreground: 'assets/images/places-adaptive.png'
+  image_path: 'assets/images/logo.png'
+  adaptive_icon_background: '#343a40'
+  adaptive_icon_foreground: 'assets/images/logo.png'
   remove_alpha_ios: true
 
 flutter_launcher_name:
-  name: 'Product Verification'
+  name: 'E-Product Verification'
 
 # The following section is specific to Flutter.
 flutter:
