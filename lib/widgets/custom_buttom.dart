@@ -14,11 +14,9 @@ class CustomButton extends StatelessWidget {
       child: BounceAnimation(
         child: ElevatedButton(
           style: ButtonStyle(
-            shadowColor: MaterialStateProperty.all(
-              // ColorConstants.PRIMARY,
+            shadowColor: MaterialStateProperty.all(        
               Colors.grey.shade400,
             ),
-            // backgroundColor: MaterialStateProperty.all(Colors.black54),
             elevation: MaterialStateProperty.all(10.0),
             shape: MaterialStateProperty.all(
               const RoundedRectangleBorder(
