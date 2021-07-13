@@ -10,6 +10,7 @@ ThemeData _buildCustomTheme() {
 
 ThemeData customThemeFoundation = ThemeData(
   primarySwatch: ColorConstants.PRIMARY,
+  // ignore: deprecated_member_use
   accentColor: ColorConstants.SECONDARY,
   fontFamily: 'OpenSans',
   scaffoldBackgroundColor: const Color(0xffF7F7F7),
@@ -37,10 +38,9 @@ ThemeData customThemeFoundation = ThemeData(
           ],
           fontWeight: FontWeight.bold,
         ),
-        headline5: TextStyle(
+        headline5: const TextStyle(
           fontFamily: 'OpenSans',
           fontSize: 12.0,
-          // fontWeight: FontWeight.bold,
         ),
         headline6: const TextStyle(
           fontFamily: 'Pacifico',
