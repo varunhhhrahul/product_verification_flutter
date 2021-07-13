@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
-// import 'package:barcode_scan_fix/barcode_scan.dart';
 import 'package:animated_qr_code_scanner/AnimatedQRViewController.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +33,6 @@ class HomeScreen extends HookWidget {
     final ValueNotifier<String> qrCodeResult = useState("Not Yet Scanned");
     final AnimatedQRViewController controller = AnimatedQRViewController();
     bool isLoading = true;
-    // final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
     void getData(String address) async {
       final DeployedContract productFactory = await loadFactoryContract();
@@ -43,13 +40,12 @@ class HomeScreen extends HookWidget {
           productFactory.function("getProducts");
       List res = await web3
           .call(contract: productFactory, function: getProducts, params: []);
-      // print(addresses[0][3]);
+
       List addresses = res[0];
 
       if (address.length == 42) {
         try {
           final data = addresses.contains(EthereumAddress.fromHex(address));
-          // print(data);
           if (data) {
             final DeployedContract productContract =
                 await loadProductContract(address);
@@ -95,9 +91,7 @@ class HomeScreen extends HookWidget {
         centerTitle: true,
         title: Text(
           'E-Product Verification',
-          style: Theme.of(context).appBarTheme.textTheme!.headline6!.copyWith(
-              // color: Colors.red,
-              ),
+          style: Theme.of(context).appBarTheme.textTheme!.headline6!.copyWith(),
         ),
       ),
       body: Column(
