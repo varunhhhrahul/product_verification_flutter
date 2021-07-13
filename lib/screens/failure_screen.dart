@@ -19,9 +19,7 @@ class FailureScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Unverified Product',
-          style: Theme.of(context).appBarTheme.textTheme!.headline6!.copyWith(
-              // color: Colors.red,
-              ),
+          style: Theme.of(context).appBarTheme.textTheme!.headline6!.copyWith(),
         ),
         leading: IconButton(
           onPressed: () {
