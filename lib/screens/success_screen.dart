@@ -2,7 +2,6 @@ import 'package:animated_qr_code_scanner/AnimatedQRViewController.dart';
 import 'package:flutter/material.dart';
 import 'package:product_verification_flutter/constants/models/product.dart';
 import 'package:product_verification_flutter/widgets/icon_animation.dart';
-import 'package:web3dart/contracts.dart';
 
 class SuccessScreenArguments {
   final Product product;
@@ -23,16 +22,14 @@ class SuccessScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Product Verified',
-          style: Theme.of(context).appBarTheme.textTheme!.headline6!.copyWith(
-              // color: Colors.green,
-              ),
+          style: Theme.of(context).appBarTheme.textTheme!.headline6!.copyWith(),
         ),
         leading: IconButton(
           onPressed: () {
             arguments!.controller.resume();
             Navigator.of(context).pop();
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.chevron_left,
           ),
         ),
@@ -50,7 +47,6 @@ class SuccessScreen extends StatelessWidget {
               ),
               subtitle: const Text(
                 'Name',
-                // style: Theme.of(context).textTheme.headline5,
               ),
               leading: const Icon(
                 Icons.production_quantity_limits,
@@ -111,7 +107,7 @@ class SuccessScreen extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.center,
-              child: IconAnimation(),
+              child: const IconAnimation(),
             )
           ],
         ),
