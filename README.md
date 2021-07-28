@@ -1,4 +1,4 @@
-# product_verification_flutter
+# Product Verification Flutter
 
 A Flutter app for scanning QR codes and verifying a product's credibility on the blockchain.
 
